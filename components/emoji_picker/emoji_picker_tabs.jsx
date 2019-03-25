@@ -11,6 +11,8 @@ import GfycatIcon from 'components/svg/gfycat_icon';
 
 import EmojiPicker from './';
 
+import EmojiPickerTabPlug from 'plugins/emoji_picker_tab_plug';
+
 export default class EmojiPickerTabs extends PureComponent {
     static propTypes = {
         style: PropTypes.object,
@@ -102,9 +104,7 @@ export default class EmojiPickerTabs extends PureComponent {
                         mountOnEnter={true}
                         unmountOnExit={true}
                     >
-                        <GifPicker
-                            onGifClick={this.props.onGifClick}
-                        />
+                      <EmojiPickerTabPlug />
                     </Tab>
                 </Tabs>
             );
