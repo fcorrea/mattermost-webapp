@@ -3,7 +3,7 @@
 
 import {connect} from 'react-redux';
 
-import EmojiPickerTabPlug from './emoji_picker_tab_plug.jsx';
+import EmojiPickerTabs from './emoji_picker_tabs.jsx';
 
 function mapStateToProps(state) {
     return {
@@ -11,4 +11,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(EmojiPickerTabPlug);
+export default connect(mapStateToProps)(EmojiPickerTabs);

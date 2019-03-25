@@ -8,8 +8,7 @@ import {Tab, Tabs} from 'react-bootstrap';
 import GifPicker from 'components/gif_picker/gif_picker.jsx';
 import EmojiIcon from 'components/svg/emoji_icon';
 import GfycatIcon from 'components/svg/gfycat_icon';
-
-import EmojiPicker from './';
+import EmojiPicker from 'components/emoji_picker';
 
 export default class EmojiPickerTabs extends PureComponent {
     static propTypes = {
@@ -22,6 +21,10 @@ export default class EmojiPickerTabs extends PureComponent {
         onEmojiClick: PropTypes.func.isRequired,
         onGifClick: PropTypes.func,
         enableGifPicker: PropTypes.bool,
+        /**
+         * Components to add as tabs in the Emoji picker
+         */
+        components: PropTypes.array,
     };
 
     static defaultProps = {
@@ -50,6 +53,8 @@ export default class EmojiPickerTabs extends PureComponent {
     };
 
     render() {
+        const components = this.props.components || [];
+        
         let pickerStyle;
         if (this.props.style && !(this.props.style.left === 0 && this.props.style.top === 0)) {
             if (this.props.placement === 'top' || this.props.placement === 'bottom') {
