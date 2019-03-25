@@ -20,7 +20,7 @@ export default class EmojiPickerTabPlug extends React.PureComponent {
 
         return (
             <div>
-              Hoy
+              Mahoy
             </div>
         );
     }

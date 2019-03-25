@@ -11,8 +11,6 @@ import GfycatIcon from 'components/svg/gfycat_icon';
 
 import EmojiPicker from './';
 
-import EmojiPickerTabPlug from 'plugins/emoji_picker_tab_plug';
-
 export default class EmojiPickerTabs extends PureComponent {
     static propTypes = {
         style: PropTypes.object,
