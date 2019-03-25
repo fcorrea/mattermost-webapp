@@ -54,6 +54,7 @@ export default class EmojiPickerTabs extends PureComponent {
 
     render() {
         const components = this.props.components || [];
+        console.log(components);
         
         let pickerStyle;
         if (this.props.style && !(this.props.style.left === 0 && this.props.style.top === 0)) {

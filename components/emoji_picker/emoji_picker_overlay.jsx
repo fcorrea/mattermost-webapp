@@ -8,7 +8,7 @@ import {Overlay} from 'react-bootstrap';
 import {popOverOverlayPosition} from 'utils/position_utils.jsx';
 import {Constants} from 'utils/constants.jsx';
 
-import EmojiPickerTabs from 'plugins/emoji_picker_tab_plug/emoji_picker_tabs.jsx';
+import EmojiPickerTabs from 'plugins/emoji_picker_tab_plug';
 
 export default class EmojiPickerOverlay extends React.PureComponent {
     // An emoji picker in the center channel is contained within the post list, so it needs space
