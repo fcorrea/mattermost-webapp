@@ -7,7 +7,6 @@ import {Tab, Tabs} from 'react-bootstrap';
 
 import GifPicker from 'components/gif_picker/gif_picker.jsx';
 import EmojiIcon from 'components/svg/emoji_icon';
-import GfycatIcon from 'components/svg/gfycat_icon';
 import EmojiPicker from 'components/emoji_picker';
 
 export default class EmojiPickerTabs extends PureComponent {
@@ -52,6 +51,46 @@ export default class EmojiPickerTabs extends PureComponent {
         });
     };
 
+    createTabs = (plugs, pickerStyle, pickerClass) => {
+        const items = plugs.map((plug) => {
+            return (
+                <Tab
+                  eventKey={1}
+                  onEnter={this.handleEnterEmojiTab}
+                  onExit={this.handleExitEmojiTab}
+                  title={plug.icon}
+                >
+                </Tab>
+            );
+        });
+
+        return (
+                <Tabs
+                    defaultActiveKey={1}
+                    id='emoji-picker-tabs'
+                    style={pickerStyle}
+                    className={pickerClass}
+                    justified={true}
+                >
+                    <Tab
+                        eventKey={1}
+                        onEnter={this.handleEnterEmojiTab}
+                        onExit={this.handleExitEmojiTab}
+                        title={<EmojiIcon/>}
+                    >
+                        <EmojiPicker
+                            style={this.props.style}
+                            onEmojiClose={this.props.onEmojiClose}
+                            onEmojiClick={this.props.onEmojiClick}
+                            customEmojis={this.props.customEmojis}
+                            visible={this.state.emojiTabVisible}
+                        />
+                    </Tab>
+                  {items}
+                </Tabs>
+        );
+    }
+
     render() {
         const components = this.props.components || [];
         console.log(components);
@@ -79,39 +118,10 @@ export default class EmojiPickerTabs extends PureComponent {
             pickerClass += ' bottom';
         }
 
-        if (this.props.enableGifPicker && typeof this.props.onGifClick != 'undefined') {
-            return (
-                <Tabs
-                    defaultActiveKey={1}
-                    id='emoji-picker-tabs'
-                    style={pickerStyle}
-                    className={pickerClass}
-                    justified={true}
-                >
-                    <Tab
-                        eventKey={1}
-                        onEnter={this.handleEnterEmojiTab}
-                        onExit={this.handleExitEmojiTab}
-                        title={<EmojiIcon/>}
-                    >
-                        <EmojiPicker
-                            style={this.props.style}
-                            onEmojiClose={this.props.onEmojiClose}
-                            onEmojiClick={this.props.onEmojiClick}
-                            customEmojis={this.props.customEmojis}
-                            visible={this.state.emojiTabVisible}
-                        />
-                    </Tab>
-                    <Tab
-                        eventKey={2}
-                        title={<GfycatIcon/>}
-                        mountOnEnter={true}
-                        unmountOnExit={true}
-                    >
-                    </Tab>
-                </Tabs>
-            );
+        if (components.length > 0) {
+            return this.createTabs(components, pickerStyle, pickerClass);
         }
+
         return (
             <div
                 id='emojiPicker'
