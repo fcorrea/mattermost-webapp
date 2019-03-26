@@ -52,10 +52,11 @@ export default class EmojiPickerTabs extends PureComponent {
     };
 
     createTabs = (plugs, pickerStyle, pickerClass) => {
-        const items = plugs.map((plug) => {
+        const items = plugs.map((plug, index) => {
             return (
                 <Tab
-                  eventKey={1}
+                  key={'emojiTabPlug' + plug.id}
+                  eventKey={index+1}
                   onEnter={this.handleEnterEmojiTab}
                   onExit={this.handleExitEmojiTab}
                   title={plug.icon}
@@ -93,7 +94,6 @@ export default class EmojiPickerTabs extends PureComponent {
 
     render() {
         const components = this.props.components || [];
-        console.log(components);
         
         let pickerStyle;
         if (this.props.style && !(this.props.style.left === 0 && this.props.style.top === 0)) {
