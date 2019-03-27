@@ -61,6 +61,7 @@ export default class EmojiPickerTabs extends PureComponent {
                   onExit={this.handleExitEmojiTab}
                   title={plug.icon}
                 >
+                  {plug.picker}
                 </Tab>
             );
         });
