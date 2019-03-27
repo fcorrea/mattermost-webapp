@@ -311,16 +311,16 @@ export default class PluginRegistry {
 
     // Add a tab to the Emoji Tabs component.
     // Accepts the following:
-    // - icon - React element to use as the button's icon
-    // - action - a function called when the button is clicked, passed the channel and channel member as arguments
-    registerEmojiPickerTabAction(icon, action) {
+    // - icon - React element to use as icon
+    // - picker - React element to use as picker
+    registerEmojiPickerTabAction(icon, picker) {
         const id = generateId();
 
         const data = {
             id,
             pluginId: this.id,
             icon: resolveReactElement(icon),
-            action,
+            picker: resolveReactElement(picker),
         };
 
         store.dispatch({
