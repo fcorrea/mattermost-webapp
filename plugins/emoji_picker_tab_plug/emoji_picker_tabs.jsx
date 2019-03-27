@@ -67,14 +67,14 @@ export default class EmojiPickerTabs extends PureComponent {
 
         return (
                 <Tabs
-                    defaultActiveKey={1}
+                    defaultActiveKey={0}
                     id='emoji-picker-tabs'
                     style={pickerStyle}
                     className={pickerClass}
                     justified={true}
                 >
                     <Tab
-                        eventKey={1}
+                        eventKey={0}
                         onEnter={this.handleEnterEmojiTab}
                         onExit={this.handleExitEmojiTab}
                         title={<EmojiIcon/>}
