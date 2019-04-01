@@ -28,11 +28,11 @@ describe('Account Settings > Display > Message Display', () => {
             type('Text after{enter}');
 
         // 3. Get last postId
-        cy.getLastPostId().then((postId) => {
+        cy.getLastPostIdWithRetry().then((postId) => {
             const postMessageTextId = `#postMessageText_${postId}`;
 
             // * Verify HTML still includes new line
-            cy.get(postMessageTextId).should('have.html', '<p>First line</p>\n<p>Text after</p>\n');
+            cy.get(postMessageTextId).should('have.html', '<p>First line</p>\n<p>Text after</p>');
 
             // 4. click dot menu button
             cy.clickPostDotMenu();
@@ -47,7 +47,7 @@ describe('Account Settings > Display > Message Display', () => {
             cy.get('#editButton').click();
 
             // * Verify HTML includes newline and the edit
-            cy.get(postMessageTextId).should('have.html', '<p>First line</p>\n<p>Text after,edited</p>\n');
+            cy.get(postMessageTextId).should('have.html', '<p>First line</p>\n<p>Text after,edited</p>');
 
             // * Post should have (edited)
             cy.get(`#postEdited_${postId}`).
