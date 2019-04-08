@@ -130,6 +130,10 @@ export default class PostList extends React.PureComponent {
             postListIds: [channelIntroMessage],
             postsObjById: {channelIntroMessage},
             floatingTimestampDate: 0,
+            postMenuOpened: false,
+            dynamicListStyle: {
+                willChange: 'transform',
+            },
         };
 
         this.listRef = React.createRef();
@@ -200,9 +204,20 @@ export default class PostList extends React.PureComponent {
 
     handleWindowResize = () => {
         this.props.actions.checkAndSetMobileView();
-        if (Utils.isMobile() !== this.state.isMobile) {
+        const isMobile = Utils.isMobile();
+        if (isMobile !== this.state.isMobile) {
+            const dynamicListStyle = this.state.dynamicListStyle;
+            if (this.state.postMenuOpened) {
+                if (!isMobile && dynamicListStyle.willChange === 'unset') {
+                    dynamicListStyle.willChange = 'transform';
+                } else if (isMobile && dynamicListStyle.willChange === 'transform') {
+                    dynamicListStyle.willChange = 'unset';
+                }
+            }
+
             this.setState({
-                isMobile: true,
+                isMobile,
+                dynamicListStyle,
             });
             this.scrollStopAction = new DelayedAction(this.handleScrollStop);
         }
@@ -220,7 +235,7 @@ export default class PostList extends React.PureComponent {
         if (this.mounted) {
             this.setState({unViewedCount});
         }
-    }
+    };
 
     loadPosts = async (channelId, focusedPostId) => {
         if (!channelId) {
@@ -266,7 +281,7 @@ export default class PostList extends React.PureComponent {
         } else {
             this.loadingMorePosts = false;
             if (this.mounted && this.props.posts) {
-                const atEnd = !moreToLoad && this.props.posts.length < this.props.postVisibility;
+                const atEnd = !moreToLoad;
                 const newState = {
                     atEnd,
                     autoRetryEnable: true,
@@ -278,7 +293,19 @@ export default class PostList extends React.PureComponent {
                 this.autoRetriesCount = 0;
             }
         }
-    }
+    };
+
+    togglePostMenu = (opened) => {
+        const dynamicListStyle = this.state.dynamicListStyle;
+        if (this.state.isMobile) {
+            dynamicListStyle.willChange = opened ? 'unset' : 'transform';
+        }
+
+        this.setState({
+            postMenuOpened: opened,
+            dynamicListStyle,
+        });
+    };
 
     renderRow = ({itemId, style}) => {
         return (
@@ -289,6 +316,7 @@ export default class PostList extends React.PureComponent {
                     shouldHighlight={itemId === this.props.focusedPostId}
                     post={this.props.postsObjById[itemId]}
                     loadMorePosts={this.loadMorePosts}
+                    togglePostMenu={this.togglePostMenu}
                 />
             </div>
         );
@@ -304,7 +332,6 @@ export default class PostList extends React.PureComponent {
         const didUserScrollBackwards = scrollDirection === 'backward' && !scrollUpdateWasRequested;
         const isOffsetWithInRange = scrollOffset < HEIGHT_TRIGGER_FOR_MORE_POSTS;
         if (isNotLoadingPosts && didUserScrollBackwards && isOffsetWithInRange && !this.state.atEnd) {
-            this.loadingMorePosts = true;
             this.loadMorePosts();
         }
 
@@ -382,7 +409,16 @@ export default class PostList extends React.PureComponent {
         const newMessagesSeparatorIndex = this.state.postListIds.findIndex(
             (item) => item.indexOf(PostListRowListIds.START_OF_NEW_MESSAGES) === 0
         );
+
         if (newMessagesSeparatorIndex > 0) {
+            const topMostPostIndex = getClosestValidPostIndex(this.state.postListIds, this.state.postListIds.length);
+            if (newMessagesSeparatorIndex === topMostPostIndex + 1) {
+                this.loadMorePosts();
+                return {
+                    index: this.state.postListIds.length - 1,
+                    position: 'start',
+                };
+            }
             return {
                 index: newMessagesSeparatorIndex,
                 position: 'start',
@@ -438,6 +474,8 @@ export default class PostList extends React.PureComponent {
             );
         }
 
+        const {dynamicListStyle} = this.state;
+
         return (
             <div id='post-list'>
                 {this.state.isMobile && (
@@ -484,6 +522,7 @@ export default class PostList extends React.PureComponent {
                                         onNewItemsMounted={this.onNewItemsMounted}
                                         canLoadMorePosts={this.canLoadMorePosts}
                                         skipResizeClass='col__reply'
+                                        style={dynamicListStyle}
                                     >
                                         {this.renderRow}
                                     </DynamicSizeList>

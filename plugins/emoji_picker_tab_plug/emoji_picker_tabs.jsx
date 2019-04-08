@@ -7,7 +7,10 @@ import {Tab, Tabs} from 'react-bootstrap';
 
 import GifPicker from 'components/gif_picker/gif_picker.jsx';
 import EmojiIcon from 'components/svg/emoji_icon';
+
 import EmojiPicker from 'components/emoji_picker';
+import EmojiPickerHeader from 'components/emoji_picker/components/emoji_picker_header';
+
 
 export default class EmojiPickerTabs extends PureComponent {
     static propTypes = {
@@ -51,6 +54,10 @@ export default class EmojiPickerTabs extends PureComponent {
         });
     };
 
+    handleEmojiPickerClose = () => {
+        this.props.onEmojiClose();
+    }
+
     createTabs = (plugs, pickerStyle, pickerClass) => {
         const items = plugs.map((plug, index) => {
             return (
@@ -67,29 +74,30 @@ export default class EmojiPickerTabs extends PureComponent {
         });
 
         return (
-                <Tabs
-                    defaultActiveKey={0}
-                    id='emoji-picker-tabs'
-                    style={pickerStyle}
-                    className={pickerClass}
-                    justified={true}
-                >
-                    <Tab
-                        eventKey={0}
-                        onEnter={this.handleEnterEmojiTab}
-                        onExit={this.handleExitEmojiTab}
-                        title={<EmojiIcon/>}
-                    >
-                        <EmojiPicker
-                            style={this.props.style}
-                            onEmojiClose={this.props.onEmojiClose}
-                            onEmojiClick={this.props.onEmojiClick}
-                            customEmojis={this.props.customEmojis}
-                            visible={this.state.emojiTabVisible}
-                        />
-                    </Tab>
-                  {items}
-                </Tabs>
+            <Tabs
+              defaultActiveKey={0}
+              id='emoji-picker-tabs'
+              style={pickerStyle}
+              className={pickerClass}
+              justified={true}
+            >
+              <EmojiPickerHeader handleEmojiPickerClose={this.handleEmojiPickerClose} />
+              <Tab
+                eventKey={0}
+                onEnter={this.handleEnterEmojiTab}
+                onExit={this.handleExitEmojiTab}
+                title={<EmojiIcon/>}
+              >
+                <EmojiPicker
+                  style={this.props.style}
+                  onEmojiClose={this.props.onEmojiClose}
+                  onEmojiClick={this.props.onEmojiClick}
+                  customEmojis={this.props.customEmojis}
+                  visible={this.state.emojiTabVisible}
+                />
+              </Tab>
+              {items}
+            </Tabs>
         );
     }
 
